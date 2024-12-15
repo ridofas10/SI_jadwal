@@ -1,0 +1,33 @@
+# Mengaktifkan mod_rewrite
+
+RewriteEngine On
+
+# Cek apakah URL tidak mengarah ke file atau folder yang sudah ada
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Mengarahkan URL tanpa ekstensi .php ke file PHP yang sesuai
+
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L,QSA]
+
+# Blokir akses langsung ke direktori
+
+Options -Indexes
+
+# Blokir akses ke file-file sensitif
+
+<FilesMatch "\.(env|config|sql|json|xml|ini)$">
+Order deny,allow
+Deny from all
+</FilesMatch>
+
+# Redirect ke halaman error 403 jika akses diblokir
+
+ErrorDocument 403 /error.html
+
+# Blokir akses dari IP tertentu
+
+Order deny,allow
+Deny from 192.168.1.1
+Allow from all
